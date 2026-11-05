@@ -33,14 +33,19 @@
       <a class="mail-direct" data-email href="mailto:contact@lotasse-fpv.ch">contact@lotasse-fpv.ch</a>
     </div>
 
-    <form class="form" id="contact-form" novalidate>
+    <form class="form" id="contact-form" action="https://formsubmit.co/contact@lotasse-fpv.ch" method="POST" novalidate>
+      <input type="hidden" name="_subject" value="Nouvelle demande depuis lotasse-fpv.ch">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://lotasse-fpv.ch/merci.html">
+      <input type="hidden" name="_autoresponse" value="Bonjour, merci pour votre message. Je l'ai bien reçu et je reviens vers vous rapidement pour parler de votre projet. À bientôt, Antoine — lotasse-fpv.ch">
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
       <div class="field-row">
         <div class="field">
-          <label for="name">Nom</label>
+          <label for="name">Nom <span aria-hidden="true">*</span></label>
           <input id="name" name="name" autocomplete="name" required>
         </div>
         <div class="field">
-          <label for="email">E-mail</label>
+          <label for="email">E-mail <span aria-hidden="true">*</span></label>
           <input id="email" name="email" type="email" autocomplete="email" required>
         </div>
       </div>
@@ -71,11 +76,12 @@
         </div>
       </div>
       <div class="field">
-        <label for="message">Votre projet</label>
+        <label for="message">Votre projet <span aria-hidden="true">*</span></label>
         <textarea id="message" name="message" required></textarea>
       </div>
-      <button class="btn" type="submit">Envoyer le message</button>
-      <p class="form-note">Le bouton ouvre votre messagerie avec le message prêt à partir vers <a data-email href="mailto:contact@lotasse-fpv.ch">contact@lotasse-fpv.ch</a>.</p>
+      <button class="btn" type="submit" id="send-btn">Envoyer le message</button>
+      <p class="form-error" id="form-error" role="alert" hidden></p>
+      <p class="form-note">* champs obligatoires. Après l'envoi, une vérification anti-spam peut s'afficher, puis vous recevez un e-mail de confirmation.</p>
     </form>
   </section>
 </main>

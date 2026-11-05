@@ -159,26 +159,32 @@
     }
   }
 
-  /* ---------- Formulaire de contact → messagerie ---------- */
+  /* ---------- Formulaire de contact ---------- */
   const form = document.getElementById("contact-form");
   if (form) {
+    const btn = document.getElementById("send-btn");
+    const err = document.getElementById("form-error");
+    // Revenir sur la page avec « précédent » réactive le bouton
+    window.addEventListener("pageshow", () => { btn.disabled = false; btn.textContent = "Envoyer le message"; });
     form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (!form.reportValidity()) return;
+      const missing = [...form.querySelectorAll("[required]")].filter((f) => !f.checkValidity());
+      form.querySelectorAll("[aria-invalid]").forEach((f) => f.removeAttribute("aria-invalid"));
+      if (missing.length) {
+        e.preventDefault();
+        missing.forEach((f) => f.setAttribute("aria-invalid", "true"));
+        const emailBad = missing.some((f) => f.type === "email" && f.value);
+        err.textContent = emailBad
+          ? "L'adresse e-mail ne semble pas valide. Vérifiez-la puis renvoyez le message."
+          : "Remplissez les champs marqués d'un astérisque : nom, e-mail et description du projet.";
+        err.hidden = false;
+        missing[0].focus();
+        return;
+      }
+      err.hidden = true;
       const d = new FormData(form);
-      const subject = `[Site] ${d.get("type")} — ${d.get("name")}`;
-      const body = [
-        `Nom : ${d.get("name")}`,
-        `E-mail : ${d.get("email")}`,
-        d.get("phone") ? `Téléphone : ${d.get("phone")}` : null,
-        `Type de projet : ${d.get("type")}`,
-        d.get("date") ? `Date / période : ${d.get("date")}` : null,
-        d.get("place") ? `Lieu : ${d.get("place")}` : null,
-        "",
-        d.get("message"),
-      ].filter((l) => l !== null).join("\n");
-      window.location.href =
-        `mailto:${cfg.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      form.querySelector('[name="_subject"]').value = `Demande ${d.get("type")} — ${d.get("name")}`;
+      btn.disabled = true;
+      btn.textContent = "Envoi en cours…";
     });
   }
 })();
