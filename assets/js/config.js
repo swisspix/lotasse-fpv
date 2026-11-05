@@ -27,13 +27,15 @@ window.SITE_CONFIG = {
   // "category" : reprendre un des services du site pour que les filtres restent cohérents :
   //   "Visites en un seul plan", "Sport et outdoor", "Événements", "Clips et publicité"
   // "description" : une phrase affichée sous la vidéo (facultatif)
+  // "start" : seconde à laquelle la vidéo démarre (facultatif, ex. start: 8 pour 0:08)
   // ---------------------------------------------------------
   videos: [
     {
       title: "Hyundai — Châtel",
       category: "Clips et publicité",
       description: "Poursuite d'une Hyundai sur une route de col : le drone colle à la voiture dans les lacets, entre forêt et voie ferrée.",
-      url: "https://www.youtube.com/watch?v=K6g6iPONp0s"
+      url: "https://www.youtube.com/watch?v=K6g6iPONp0s",
+      start: 8
     },
     {
       title: "Cornettes de Bise",

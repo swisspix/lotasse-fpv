@@ -28,16 +28,17 @@
     return null;
   };
   // Lecteur épuré : son coupé, aucune commande YouTube/Vimeo, seulement lecture / pause
-  const embedSrc = (s) => {
+  const embedSrc = (s, start = 0) => {
     if (s.type === "yt") {
       const q = new URLSearchParams({
         autoplay: 1, mute: 1, controls: 0, disablekb: 1, fs: 0, rel: 0,
         playsinline: 1, iv_load_policy: 3, loop: 1, playlist: s.id,
         enablejsapi: 1, origin: location.origin,
       });
+      if (start) q.set("start", start);
       return `https://www.youtube-nocookie.com/embed/${s.id}?${q}`;
     }
-    return `https://player.vimeo.com/video/${s.id}?autoplay=1&muted=1&controls=0&loop=1&dnt=1&title=0&byline=0&portrait=0`;
+    return `https://player.vimeo.com/video/${s.id}?autoplay=1&muted=1&controls=0&loop=1&dnt=1&title=0&byline=0&portrait=0${start ? `#t=${start}s` : ""}`;
   };
   const command = (iframe, type, play) => {
     const msg = type === "yt"
@@ -71,7 +72,7 @@
       const box = document.createElement("div");
       box.className = "live is-playing is-loading";
       const f = document.createElement("iframe");
-      f.src = embedSrc(video.src);
+      f.src = embedSrc(video.src, Number(video.start) || 0);
       f.title = video.title;
       f.allow = "autoplay; picture-in-picture";
       f.tabIndex = -1;
