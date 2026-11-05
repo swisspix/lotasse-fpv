@@ -11,6 +11,7 @@
 
   /* ---------- Outils vidéo ---------- */
   const parse = (url) => {
+    if (/\.(mp4|webm)(\?|$)/i.test(url) && !/^https?:/i.test(url)) return { type: "file", id: url };
     try {
       const u = new URL(url);
       const h = u.hostname.replace(/^(www|m)\./, "");
@@ -45,6 +46,7 @@
     return `https://player.vimeo.com/video/${s.id}?autoplay=1&muted=1&controls=0&loop=1&dnt=1&title=0&byline=0&portrait=0${start ? `#t=${start}s` : ""}`;
   };
   const command = (iframe, type, play) => {
+    if (type === "file") { play ? iframe.play().catch(() => {}) : iframe.pause(); return; }
     const msg = type === "yt"
       ? { event: "command", func: play ? "playVideo" : "pauseVideo", args: [] }
       : { method: play ? "play" : "pause" };
@@ -63,7 +65,13 @@
     b.type = "button";
     b.className = "player";
     b.setAttribute("aria-label", "Lire la vidéo : " + video.title);
-    if (video.src.type === "yt") {
+    if (video.poster) {
+      const img = document.createElement("img");
+      img.src = video.poster;
+      img.alt = "";
+      img.loading = "lazy";
+      b.appendChild(img);
+    } else if (video.src.type === "yt") {
       const img = document.createElement("img");
       // Miniature YouTube en haute définition, repli sur la version standard si elle n'existe pas
       const hq = `https://i.ytimg.com/vi/${video.src.id}/hqdefault.jpg`;
@@ -95,10 +103,22 @@
     b.addEventListener("click", (ev) => {
       const box = document.createElement("div");
       box.className = "live is-playing is-loading";
-      const f = document.createElement("iframe");
-      f.src = embedSrc(video.src, Number(video.start) || 0);
+      let f;
+      if (video.src.type === "file") {
+        f = document.createElement("video");
+        Object.assign(f, { src: video.src.id, muted: true, loop: true, playsInline: true, autoplay: true, preload: "auto" });
+        f.setAttribute("muted", "");
+        if (video.poster) f.poster = video.poster;
+        if (video.start) f.currentTime = Number(video.start);
+        f.addEventListener("playing", () => box.classList.remove("is-loading"));
+        f.addEventListener("pause", () => box.classList.add("is-loading"));
+        box.classList.add("is-file");
+      } else {
+        f = document.createElement("iframe");
+        f.src = embedSrc(video.src, Number(video.start) || 0);
+        f.allow = "autoplay; picture-in-picture";
+      }
       f.title = video.title;
-      f.allow = "autoplay; picture-in-picture";
       f.tabIndex = -1;
       // Image de couverture affichée tant que la vidéo ne tourne pas : masque l'interface YouTube
       const poster = document.createElement("div");
@@ -134,13 +154,13 @@
           if (st === 1) box.classList.remove("is-loading");
           if (st === 2) box.classList.add("is-loading");
         });
-      } else {
+      } else if (video.src.type !== "file") {
         setTimeout(() => box.classList.remove("is-loading"), 1500);
       }
       t.addEventListener("click", () => {
         const play = !ctl.playing();
         ctl.set(play);
-        if (play && video.src.type !== "yt") box.classList.remove("is-loading");
+        if (play && video.src.type === "vimeo") box.classList.remove("is-loading");
       });
       if (current) current.set(false);
       current = ctl;

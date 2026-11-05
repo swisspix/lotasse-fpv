@@ -24,6 +24,7 @@ window.SITE_CONFIG = {
   //   https://youtu.be/XXXX
   //   https://www.youtube.com/shorts/XXXX
   //   https://vimeo.com/123456789
+  //   un fichier du site : "assets/video/nom.mp4" + poster: "assets/img/nom.jpg" (lecteur épuré)
   //   https://www.instagram.com/reel/XXXX/ (lecteur Instagram, son et commandes d'Instagram)
   // "category" : reprendre un des services du site pour que les filtres restent cohérents :
   //   "Visites en un seul plan", "Sport et outdoor", "Événements", "Clips et publicité"
@@ -59,8 +60,9 @@ window.SITE_CONFIG = {
     ,{
       title: "Trail Blonay – St-Légier 2025",
       category: "Clips et publicité",
-      description: "Reel publicitaire pour le Trail Blonay – St-Légier 2025, « la montagne au centre », réalisé avec l'organisation de la course.",
-      url: "https://www.instagram.com/reel/DIecsJRI0m8/"
+      description: "Annonce de la course du 17 mai 2025 : vol en rase-mottes sur les pâturages au-dessus du Léman, jusqu'aux coureurs.",
+      url: "assets/video/trail-blonay-2025.mp4",
+      poster: "assets/img/trail-blonay-2025.jpg"
     }
     // ,{ title: "Titre", category: "Catégorie", description: "Une phrase.", url: "https://youtu.be/XXXXXXXXXXX" }
   ]
