@@ -27,7 +27,9 @@ window.SITE_CONFIG = {
   // "category" est libre (ex. Immobilier, Événement, Sport…)
   // ---------------------------------------------------------
   videos: [
-    // { title: "Showreel 2026", category: "Showreel", url: "https://youtu.be/XXXXXXXXXXX" },
-    // { title: "Chalet à Verbier", category: "Immobilier", url: "https://youtu.be/XXXXXXXXXXX" }
+    { title: "Hyundai Châtel — vol 1", category: "Commerce", url: "https://www.youtube.com/watch?v=K6g6iPONp0s" },
+    { title: "Hyundai Châtel — vol 2", category: "Commerce", url: "https://www.youtube.com/watch?v=AEcJ6QWoRsE" },
+    { title: "Hyundai Châtel — vol 3", category: "Commerce", url: "https://www.youtube.com/watch?v=u-jIxZrmmrw" }
+    // ,{ title: "Titre", category: "Immobilier", url: "https://youtu.be/XXXXXXXXXXX" }
   ]
 };
