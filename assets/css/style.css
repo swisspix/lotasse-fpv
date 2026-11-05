@@ -1,0 +1,234 @@
+/* lotasse-fpv — feuille de style
+   Direction : l'écran de vol d'un pilote FPV (OSD) posé sur un paysage alpin. */
+
+:root {
+  --ink: #0c1a2b;        /* fond nuit alpine */
+  --deep: #12263d;       /* surfaces */
+  --ridge: #1f3a58;      /* lignes, crêtes */
+  --mist: #8fa6bd;       /* texte secondaire */
+  --osd: #eef3f6;        /* texte OSD / principal */
+  --signal: #ffc531;     /* jaune OSD : accent unique */
+  --alert: #ff5a4e;      /* REC / batterie faible */
+
+  --f-display: "Chakra Petch", system-ui, sans-serif;
+  --f-body: "Barlow", system-ui, sans-serif;
+
+  --wrap: 1180px;
+  --gutter: clamp(16px, 4vw, 40px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--osd);
+  font: 400 1.0625rem/1.6 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg, video, iframe { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+
+.wrap { width: min(var(--wrap), 100% - 2 * var(--gutter)); margin-inline: auto; }
+
+/* ---------- En-tête ---------- */
+.site-head {
+  position: absolute; inset: 0 0 auto; z-index: 20;
+  padding: 22px 0;
+}
+.site-head.solid { position: relative; border-bottom: 1px solid var(--ridge); }
+.site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand {
+  font: 600 1.25rem/1 var(--f-display);
+  letter-spacing: .02em; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.brand-mark { width: 30px; height: 30px; }
+.nav { display: flex; gap: clamp(14px, 3vw, 32px); align-items: center; }
+.nav a {
+  text-decoration: none; font: 500 1rem var(--f-display); color: var(--osd);
+  padding: 6px 0; border-bottom: 2px solid transparent;
+}
+.nav a:hover, .nav a[aria-current="page"] { border-color: var(--signal); }
+.nav .nav-cta {
+  border: 1.5px solid var(--signal); color: var(--signal);
+  padding: 8px 16px; border-radius: 2px;
+}
+.nav .nav-cta:hover { background: var(--signal); color: var(--ink); }
+@media (max-width: 640px) { .nav a:not(.nav-cta) { display: none; } }
+
+/* ---------- Hero : vue caméra FPV ---------- */
+.hero {
+  position: relative; min-height: 100svh; overflow: hidden;
+  display: grid; align-items: end;
+  background: linear-gradient(180deg, #2b4a6b 0%, #5b7a96 45%, #a9bccb 62%, #1a3049 63%, var(--ink) 100%);
+}
+.hero-scene, .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero-scene { transform-origin: 50% 60%; transition: transform .25s ease-out; }
+.hero::after { /* vignette des lunettes */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(6,14,24,.75) 100%);
+}
+
+.osd {
+  position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  font: 600 clamp(.8rem, 1.4vw, 1rem)/1.2 var(--f-display);
+  color: var(--osd); text-shadow: 0 0 2px #000, 0 0 6px rgba(0,0,0,.6);
+  letter-spacing: .04em;
+}
+.osd-item { position: absolute; display: flex; gap: .5em; align-items: center; }
+.osd-tl { top: 96px; left: var(--gutter); }
+.osd-tr { top: 96px; right: var(--gutter); }
+.osd-bl { bottom: 28px; left: var(--gutter); }
+.osd-br { bottom: 28px; right: var(--gutter); }
+.osd-batt b { color: var(--signal); font-weight: 600; }
+.osd-rec::before {
+  content: ""; width: .7em; height: .7em; border-radius: 50%; background: var(--alert);
+  animation: blink 1.2s steps(2, start) infinite;
+}
+.osd-arm { color: var(--mist); }
+.osd-arm.armed { color: var(--signal); }
+.crosshair {
+  position: absolute; left: 50%; top: 30%; width: min(240px, 46vw);
+  transform: translate(-50%, -50%); opacity: .9;
+}
+@media (max-width: 640px) { .crosshair { top: 24%; } }
+@keyframes blink { to { visibility: hidden; } }
+
+.hero-copy {
+  position: relative; z-index: 6;
+  padding-bottom: clamp(90px, 14vh, 150px);
+}
+.hero h1 {
+  font: 700 clamp(2.6rem, 8.4vw, 7rem)/.92 var(--f-display);
+  letter-spacing: -.01em; margin: 0 0 .3em; max-width: 12ch;
+  text-shadow: 0 2px 30px rgba(6,14,24,.45);
+}
+.hero p { font-size: clamp(1.05rem, 1.6vw, 1.3rem); max-width: 46ch; margin: 0 0 2rem; color: #dbe5ec; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: .6em;
+  font: 600 1rem var(--f-display); letter-spacing: .02em; text-decoration: none;
+  padding: 14px 24px; border-radius: 2px; border: 1.5px solid var(--signal);
+  background: var(--signal); color: var(--ink); cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.btn:hover { background: transparent; color: var(--signal); }
+.btn.ghost { background: transparent; color: var(--osd); border-color: var(--osd); }
+.btn.ghost:hover { background: var(--osd); color: var(--ink); }
+.btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* ---------- Sections ---------- */
+section { padding: clamp(72px, 11vw, 140px) 0; }
+.section-head { display: grid; gap: 14px; margin-bottom: clamp(36px, 5vw, 64px); max-width: 720px; }
+h2 {
+  font: 700 clamp(2rem, 4.6vw, 3.4rem)/1 var(--f-display);
+  letter-spacing: -.01em; margin: 0;
+}
+h3 { font: 600 1.35rem/1.2 var(--f-display); margin: 0 0 .5rem; }
+.lead { color: var(--mist); font-size: 1.15rem; margin: 0; max-width: 60ch; }
+
+/* Services : une liste de lignes, pas des cartes */
+.services { border-top: 1px solid var(--ridge); }
+.service {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 16px 48px; padding: 32px 0; border-bottom: 1px solid var(--ridge);
+}
+.service h3 { font-size: clamp(1.4rem, 2.6vw, 2rem); }
+.service p { margin: 0; color: #c7d3dd; max-width: 58ch; }
+.service .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.tag {
+  font: 500 .85rem var(--f-display); color: var(--mist);
+  border: 1px solid var(--ridge); padding: 3px 10px; border-radius: 2px;
+}
+@media (max-width: 760px) { .service { grid-template-columns: 1fr; } }
+
+/* Vidéos */
+#videos { background: var(--deep); }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.filters button {
+  font: 500 .95rem var(--f-display); color: var(--osd); background: transparent;
+  border: 1px solid var(--ridge); padding: 7px 14px; border-radius: 2px; cursor: pointer;
+}
+.filters button[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); }
+.video-grid {
+  display: grid; gap: clamp(20px, 3vw, 36px);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+}
+.video-grid .video:first-child { grid-column: 1 / -1; }
+.video figure { margin: 0; }
+.frame {
+  position: relative; aspect-ratio: 16 / 9; background: var(--ink); overflow: hidden;
+  border: 1px solid var(--ridge);
+}
+.frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.frame button {
+  all: unset; position: absolute; inset: 0; cursor: pointer;
+  display: grid; place-items: center;
+}
+.frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.frame button:hover img { transform: scale(1.03); }
+.frame button:focus-visible { outline: 2px solid var(--signal); outline-offset: -4px; }
+.play {
+  position: relative; z-index: 2; width: 72px; height: 72px; border-radius: 50%;
+  background: rgba(12,26,43,.7); border: 2px solid var(--signal);
+  display: grid; place-items: center;
+}
+.play svg { width: 26px; margin-left: 4px; fill: var(--signal); }
+.frame .corner { /* repères de cadrage */
+  position: absolute; width: 18px; height: 18px; border-color: var(--osd); border-style: solid; z-index: 2; opacity: .8;
+}
+.c1 { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
+.c2 { top: 10px; right: 10px; border-width: 2px 2px 0 0; }
+.c3 { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; }
+.c4 { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+.video figcaption { display: flex; justify-content: space-between; gap: 12px; padding-top: 12px; align-items: baseline; }
+.video figcaption strong { font: 600 1.1rem var(--f-display); }
+.video figcaption span { color: var(--mist); font: 500 .9rem var(--f-display); white-space: nowrap; }
+.empty { color: var(--mist); border: 1px dashed var(--ridge); padding: 32px; }
+
+/* Déroulé d'un mandat — une vraie séquence */
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); counter-reset: step; }
+.steps li { padding: 28px 24px 28px 0; border-top: 2px solid var(--ridge); position: relative; counter-increment: step; }
+.steps li::before {
+  content: counter(step); display: block; font: 700 2.4rem/1 var(--f-display); color: var(--signal); margin-bottom: 14px;
+}
+.steps p { color: #c7d3dd; margin: 0; }
+
+/* Bandeau contact */
+.cta-band { border-top: 1px solid var(--ridge); }
+.cta-band .wrap { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; }
+.cta-band h2 { max-width: 16ch; }
+
+/* ---------- Page contact ---------- */
+.contact-page { padding-top: clamp(48px, 8vw, 96px); }
+.contact-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 88px); }
+@media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; } }
+.mail-direct {
+  display: inline-block; margin-top: 28px; font: 600 clamp(1.2rem, 2.6vw, 1.7rem) var(--f-display);
+  color: var(--signal); text-decoration: none; border-bottom: 2px solid var(--signal); word-break: break-all;
+}
+.mail-direct:hover { color: var(--osd); border-color: var(--osd); }
+.form { display: grid; gap: 20px; }
+.field { display: grid; gap: 8px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 560px) { .field-row { grid-template-columns: 1fr; } }
+label { font: 500 .95rem var(--f-display); color: var(--mist); }
+input, select, textarea {
+  font: inherit; color: var(--osd); background: var(--deep);
+  border: 1px solid var(--ridge); border-radius: 2px; padding: 12px 14px; width: 100%;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--signal); }
+textarea { min-height: 170px; resize: vertical; }
+.form-note { color: var(--mist); font-size: .92rem; margin: 0; }
+
+/* ---------- Pied de page ---------- */
+.site-foot { border-top: 1px solid var(--ridge); padding: 32px 0; color: var(--mist); font-size: .95rem; }
+.site-foot .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.site-foot a { color: var(--osd); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

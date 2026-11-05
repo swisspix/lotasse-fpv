@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lotasse FPV — Pilote de drone FPV, Lausanne</title>
+  <meta name="description" content="Prises de vue immersives en drone FPV en Suisse romande : immobilier, événements, sport, clips et publicité.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="Lotasse FPV — Pilote de drone FPV">
+  <meta property="og:description" content="Des plans en vol immersif qu'aucune autre caméra ne peut tourner.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lotasse-fpv.ch/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="./">
+      <img class="brand-mark" src="assets/img/favicon.svg" alt="">
+      lotasse-fpv
+    </a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="#services">Services</a>
+      <a href="#videos">Vidéos</a>
+      <a href="#deroule">Déroulé</a>
+      <a class="nav-cta" href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HERO : la vue dans les lunettes du pilote -->
+  <section class="hero" aria-labelledby="hero-title" style="padding:0">
+    <svg class="hero-scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2b4a6b"/><stop offset=".55" stop-color="#7f9bb3"/><stop offset="1" stop-color="#c9d6df"/>
+        </linearGradient>
+        <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#4f7393"/><stop offset="1" stop-color="#0c1a2b"/>
+        </linearGradient>
+      </defs>
+      <rect x="-200" y="-200" width="2000" height="1300" fill="url(#sky)"/>
+      <path d="M-200 520 L80 380 L210 430 L360 300 L470 370 L560 330 L700 410 L820 290 L930 350 L1060 260 L1180 360 L1300 310 L1420 390 L1560 330 L1800 420 L1800 560 L-200 560Z" fill="#6c869d"/>
+      <path d="M-200 560 L120 470 L300 520 L520 450 L760 530 L980 470 L1200 540 L1420 480 L1800 560 L1800 600 L-200 600Z" fill="#3d5873"/>
+      <rect x="-200" y="590" width="2000" height="500" fill="url(#lake)"/>
+      <path d="M-200 590 H1800" stroke="#c9d6df" stroke-width="2" opacity=".5"/>
+      <path d="M-200 760 C300 700 600 720 820 690 C1040 660 1300 700 1800 640 L1800 1100 L-200 1100Z" fill="#132a42"/>
+    </svg>
+
+    <div class="osd" aria-hidden="true">
+      <div class="osd-item osd-tl osd-batt"><span>BAT</span><b>4S 16.4V</b></div>
+      <div class="osd-item osd-tr"><span class="osd-arm">DISARMED</span></div>
+      <svg class="crosshair" viewBox="0 0 240 60" fill="none" stroke="#eef3f6" stroke-width="2">
+        <path d="M0 30 H80 M160 30 H240 M100 30 H140 M120 20 V40"/>
+        <path d="M80 30 l10 10 M160 30 l-10 10"/>
+      </svg>
+      <div class="osd-item osd-bl osd-rec">REC · 4K</div>
+      <div class="osd-item osd-br"><span>FLY</span><span class="osd-timer">00:00</span></div>
+    </div>
+
+    <div class="wrap hero-copy">
+      <h1 id="hero-title">Filmer au plus près, en plein vol.</h1>
+      <p>Pilote de drone FPV basé à Lausanne. Je tourne des plans immersifs qui traversent, frôlent et suivent l'action — là où aucune autre caméra ne passe.</p>
+      <div class="btn-row">
+        <a class="btn" href="contact.html">Discuter d'un projet</a>
+        <a class="btn ghost" href="#videos">Voir les vidéos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Ce que je filme</h2>
+        <p class="lead">Un drone FPV se pilote comme un oiseau : il plonge, passe les portes, rase l'eau. Il apporte du mouvement là où un drone classique reste statique.</p>
+      </div>
+      <div class="services">
+        <div class="service">
+          <h3>Visites immersives en un seul plan</h3>
+          <div>
+            <p>Un vol continu qui entre par la fenêtre, traverse les pièces et ressort sur la vue. Idéal pour présenter un bien, un hôtel, un restaurant ou des locaux.</p>
+            <div class="tags"><span class="tag">Immobilier</span><span class="tag">Hôtellerie</span><span class="tag">Commerces</span></div>
+          </div>
+        </div>
+        <div class="service">
+          <h3>Sport et outdoor</h3>
+          <div>
+            <p>Suivre un trailer en crête, un rider en descente ou un bateau sur le lac, à la même vitesse et au plus près du sujet.</p>
+            <div class="tags"><span class="tag">Trail</span><span class="tag">VTT</span><span class="tag">Glisse</span><span class="tag">Nautisme</span></div>
+          </div>
+        </div>
+        <div class="service">
+          <h3>Événements</h3>
+          <div>
+            <p>Mariages, festivals, inaugurations, courses : des images qui donnent l'échelle du lieu et l'énergie du moment.</p>
+            <div class="tags"><span class="tag">Mariage</span><span class="tag">Festival</span><span class="tag">Corporate</span></div>
+          </div>
+        </div>
+        <div class="service">
+          <h3>Clips et publicité</h3>
+          <div>
+            <p>Des plans signature pour un clip, une pub ou un film de marque, en complément de votre équipe de tournage.</p>
+            <div class="tags"><span class="tag">Clip musical</span><span class="tag">Pub</span><span class="tag">Réseaux sociaux</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEOS : alimentées par assets/js/config.js -->
+  <section id="videos">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Vidéos</h2>
+        <p class="lead">Une sélection de vols récents.</p>
+      </div>
+      <div class="filters" id="video-filters"></div>
+      <div class="video-grid" id="video-grid"></div>
+    </div>
+  </section>
+
+  <!-- DÉROULÉ -->
+  <section id="deroule">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Comment se passe un mandat</h2>
+      </div>
+      <ol class="steps">
+        <li><h3>Échange</h3><p>Vous me décrivez le projet, le lieu et l'usage des images. Je vous réponds avec une proposition.</p></li>
+        <li><h3>Repérage</h3><p>Je vérifie la zone, les autorisations nécessaires et je prépare la trajectoire du vol.</p></li>
+        <li><h3>Tournage</h3><p>Plusieurs prises sur place, ajustées avec vous jusqu'à obtenir le bon plan.</p></li>
+        <li><h3>Livraison</h3><p>Rushes stabilisés ou montage final, aux formats dont vous avez besoin.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Un lieu, un événement, une idée de plan ?</h2>
+      <a class="btn" href="contact.html">Me contacter</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>© <span data-year></span> lotasse-fpv · Lausanne, Suisse</span>
+    <a data-email href="#"></a>
+  </div>
+</footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
