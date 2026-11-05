@@ -159,32 +159,60 @@
     }
   }
 
-  /* ---------- Formulaire de contact ---------- */
+  /* ---------- Formulaire de contact (Web3Forms) ---------- */
   const form = document.getElementById("contact-form");
   if (form) {
     const btn = document.getElementById("send-btn");
     const err = document.getElementById("form-error");
-    // Revenir sur la page avec « précédent » réactive le bouton
-    window.addEventListener("pageshow", () => { btn.disabled = false; btn.textContent = "Envoyer le message"; });
-    form.addEventListener("submit", (e) => {
-      const missing = [...form.querySelectorAll("[required]")].filter((f) => !f.checkValidity());
+    document.getElementById("access-key").value = cfg.formKey || "";
+    const showError = (html) => { err.innerHTML = html; err.hidden = false; };
+    const fallback = `Vous pouvez aussi écrire directement à <a href="mailto:${cfg.email}">${cfg.email}</a>.`;
+    const reset = () => { btn.disabled = false; btn.textContent = "Envoyer le message"; };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
       form.querySelectorAll("[aria-invalid]").forEach((f) => f.removeAttribute("aria-invalid"));
+      const missing = [...form.querySelectorAll("[required]")].filter((f) => !f.checkValidity());
       if (missing.length) {
-        e.preventDefault();
         missing.forEach((f) => f.setAttribute("aria-invalid", "true"));
         const emailBad = missing.some((f) => f.type === "email" && f.value);
-        err.textContent = emailBad
+        showError(emailBad
           ? "L'adresse e-mail ne semble pas valide. Vérifiez-la puis renvoyez le message."
-          : "Remplissez les champs marqués d'un astérisque : nom, e-mail et description du projet.";
-        err.hidden = false;
+          : "Remplissez les champs marqués d'un astérisque : nom, e-mail et description du projet.");
         missing[0].focus();
         return;
       }
       err.hidden = true;
-      const d = new FormData(form);
-      form.querySelector('[name="_subject"]').value = `Demande ${d.get("type")} — ${d.get("name")}`;
+      if (!cfg.formKey) {
+        showError("L'envoi depuis le site n'est pas encore activé. " + fallback);
+        return;
+      }
+      const d = Object.fromEntries(new FormData(form));
+      d.subject = `Demande ${d.type} — ${d.name}`;
+      delete d.redirect;
       btn.disabled = true;
       btn.textContent = "Envoi en cours…";
+      try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 15000);
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(d),
+          signal: ctrl.signal,
+        });
+        clearTimeout(timer);
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.success) throw new Error(json.message || res.status);
+        form.hidden = true;
+        document.getElementById("sent-email").textContent = d.email;
+        const sent = document.getElementById("form-sent");
+        sent.hidden = false;
+        document.getElementById("sent-title").focus();
+      } catch (ex) {
+        reset();
+        showError("Le message n'a pas pu partir, votre texte est toujours là. Réessayez dans un instant. " + fallback);
+      }
     });
   }
 })();

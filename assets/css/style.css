@@ -190,6 +190,13 @@ textarea { min-height: 140px; resize: vertical; }
 .btn:hover { background: #fff; color: var(--ink); }
 .form-note { font-size: .88rem; color: var(--muted); }
 .form-error { color: #b00020; font-size: .95rem; }
+.form-error a { color: #b00020; }
+.sent { grid-column: 7 / span 6; display: grid; gap: 20px; justify-items: start; border-top: 1px solid var(--ink); padding-top: 24px; align-self: start; }
+.sent h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
+.sent h2:focus { outline: none; }
+.sent p { color: var(--text-2); font-size: 1.1rem; max-width: 460px; }
+.sent strong { color: var(--ink); font-weight: 500; }
+@media (max-width: 900px) { .sent { grid-column: 1 / -1; } }
 [aria-invalid="true"] { border-bottom-color: #b00020; }
 .btn:disabled { opacity: .55; cursor: progress; }
 

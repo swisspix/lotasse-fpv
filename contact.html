@@ -33,12 +33,12 @@
       <a class="mail-direct" data-email href="mailto:contact@lotasse-fpv.ch">contact@lotasse-fpv.ch</a>
     </div>
 
-    <form class="form" id="contact-form" action="https://formsubmit.co/contact@lotasse-fpv.ch" method="POST" novalidate>
-      <input type="hidden" name="_subject" value="Nouvelle demande depuis lotasse-fpv.ch">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_next" value="https://lotasse-fpv.ch/merci.html">
-      <input type="hidden" name="_autoresponse" value="Bonjour, merci pour votre message. Je l'ai bien reçu et je reviens vers vous rapidement pour parler de votre projet. À bientôt, Antoine — lotasse-fpv.ch">
-      <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+    <form class="form" id="contact-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+      <input type="hidden" name="access_key" id="access-key" value="">
+      <input type="hidden" name="subject" value="Nouvelle demande depuis lotasse-fpv.ch">
+      <input type="hidden" name="from_name" value="Site lotasse-fpv.ch">
+      <input type="hidden" name="redirect" value="https://lotasse-fpv.ch/merci.html">
+      <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
       <div class="field-row">
         <div class="field">
           <label for="name">Nom <span aria-hidden="true">*</span></label>
@@ -81,8 +81,14 @@
       </div>
       <button class="btn" type="submit" id="send-btn">Envoyer le message</button>
       <p class="form-error" id="form-error" role="alert" hidden></p>
-      <p class="form-note">* champs obligatoires. Après l'envoi, une vérification anti-spam peut s'afficher, puis vous recevez un e-mail de confirmation.</p>
+      <p class="form-note">* champs obligatoires</p>
     </form>
+
+    <div class="sent" id="form-sent" hidden>
+      <h2 tabindex="-1" id="sent-title">Message envoyé.</h2>
+      <p>Merci, votre demande est bien arrivée. Je reviens vers vous rapidement à l'adresse <strong id="sent-email"></strong>.</p>
+      <a class="btn-link" href="videos.html">Voir les vidéos en attendant</a>
+    </div>
   </section>
 </main>
 

@@ -7,6 +7,9 @@ window.SITE_CONFIG = {
   // Adresse vers laquelle le formulaire de contact redirige
   email: "contact@lotasse-fpv.ch",
 
+  // Clé Web3Forms reçue par e-mail sur contact@lotasse-fpv.ch (formulaire de contact)
+  formKey: "",
+
   // Vidéo de fond du bandeau d'accueil (facultatif).
   // Déposez un fichier MP4 court et léger (idéalement < 8 Mo, sans son)
   // dans assets/video/ puis indiquez son chemin, ex. "assets/video/showreel.mp4".
