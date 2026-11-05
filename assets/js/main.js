@@ -83,6 +83,12 @@
       caption.innerHTML = "<span></span><span></span>";
       caption.children[0].textContent = first.title;
       caption.children[1].textContent = first.category && first.category !== first.title ? first.category : "";
+      if (first.description) {
+        const p = document.createElement("p");
+        p.className = "showreel-desc";
+        p.textContent = first.description;
+        caption.after(p);
+      }
       gridVideos = videos.slice(1);
     } else {
       reel.parentElement.hidden = true;
@@ -93,10 +99,12 @@
   const card = (v) => {
     const fig = document.createElement("figure");
     fig.className = "video";
-    fig.innerHTML = '<div class="frame"></div><figcaption><strong></strong><span></span></figcaption>';
+    fig.innerHTML = '<div class="frame"></div><figcaption><strong></strong><span></span></figcaption><p class="desc"></p>';
     fig.querySelector(".frame").appendChild(makePlayer(v));
     fig.querySelector("strong").textContent = v.title;
     fig.querySelector("figcaption span").textContent = v.category || "";
+    const desc = fig.querySelector(".desc");
+    if (v.description) desc.textContent = v.description; else desc.remove();
     return fig;
   };
 

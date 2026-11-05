@@ -107,6 +107,8 @@ h1, h2, h3, p, figure { margin: 0; }
 .video .frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .video figcaption { display: flex; justify-content: space-between; gap: 12px; padding-top: 14px; font-size: .95rem; }
 .video figcaption strong { font-weight: 400; }
+.video .desc { margin-top: 6px; color: var(--text-2); font-size: .95rem; max-width: 52ch; }
+.showreel-desc { margin-top: 6px; color: var(--text-2); max-width: 60ch; }
 .video figcaption span { color: var(--muted); white-space: nowrap; }
 
 /* ---------- Page Vidéos ---------- */
