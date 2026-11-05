@@ -191,7 +191,7 @@ h1, h2, h3, p, figure { margin: 0; }
   display: flex; justify-content: space-between; align-items: flex-end; gap: 24px 48px; flex-wrap: wrap;
 }
 .cta p { font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1; font-weight: 500; letter-spacing: -0.035em; max-width: 760px; }
-.cta a { font-size: clamp(1.15rem, 2vw, 1.75rem); letter-spacing: -0.02em; word-break: break-all; }
+.cta .btn-link { font-size: 1.05rem; padding: 16px 28px; }
 .legal-links { display: flex; gap: 24px; }
 .legal a { color: var(--muted); }
 .social { font-size: 1.05rem; }
