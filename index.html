@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=13">
+  <link rel="stylesheet" href="assets/css/style.css?v=14">
 </head>
 <body>
 
@@ -39,17 +39,20 @@
       </div>
     </section>
 
-    <figure>
+    <section class="reel" id="travaux" aria-roledescription="carrousel" aria-label="Vidéos">
       <div class="showreel" id="showreel"></div>
-      <figcaption class="showreel-caption" id="showreel-caption"></figcaption>
-    </figure>
-
-    <section class="section" id="travaux" aria-labelledby="travaux-title">
-      <div class="section-head">
-        <h2 class="label" id="travaux-title">Travaux récents</h2>
-        <a href="videos.html">Toutes les vidéos</a>
+      <div class="reel-bar">
+        <div class="reel-info" aria-live="polite">
+          <div class="showreel-caption"><span id="reel-title"></span><span id="reel-cat"></span></div>
+          <p class="showreel-desc" id="reel-desc"></p>
+        </div>
+        <div class="reel-nav">
+          <span class="reel-count" id="reel-count"></span>
+          <button type="button" class="arrow" id="reel-prev" aria-label="Vidéo précédente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          <button type="button" class="arrow" id="reel-next" aria-label="Vidéo suivante"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          <a class="reel-all" href="videos.html">Toutes les vidéos</a>
+        </div>
       </div>
-      <div class="video-grid" id="video-grid"></div>
     </section>
 
     <section class="section rows" id="services" aria-labelledby="services-title">
@@ -96,7 +99,7 @@
   </div>
 </footer>
 
-<script src="assets/js/config.js?v=13"></script>
-<script src="assets/js/main.js?v=13"></script>
+<script src="assets/js/config.js?v=14"></script>
+<script src="assets/js/main.js?v=14"></script>
 </body>
 </html>

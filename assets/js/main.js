@@ -173,36 +173,46 @@
 
   const videos = (cfg.videos || []).map((v) => ({ ...v, src: parse(v.url) })).filter((v) => v.src);
 
-  /* ---------- Showreel ---------- */
+  /* ---------- Carrousel de l'accueil ---------- */
   const reel = document.getElementById("showreel");
   let gridVideos = videos;
   if (reel) {
-    const caption = document.getElementById("showreel-caption");
-    if (cfg.heroVideo) {
-      const v = document.createElement("video");
-      v.src = cfg.heroVideo;
-      v.muted = true;
-      v.loop = true;
-      v.playsInline = true;
-      v.autoplay = !reduced;
-      v.setAttribute("aria-label", "Showreel");
-      reel.appendChild(v);
-      caption.innerHTML = "<span>Showreel</span>";
-    } else if (videos.length) {
-      const first = videos[0];
-      reel.appendChild(makePlayer(first));
-      caption.innerHTML = "<span></span><span></span>";
-      caption.children[0].textContent = first.title;
-      caption.children[1].textContent = first.category && first.category !== first.title ? first.category : "";
-      if (first.description) {
-        const p = document.createElement("p");
-        p.className = "showreel-desc";
-        p.textContent = first.description;
-        caption.after(p);
-      }
-      gridVideos = videos.slice(1);
+    const section = document.getElementById("travaux");
+    if (!videos.length) {
+      section.hidden = true;
     } else {
-      reel.parentElement.hidden = true;
+      let i = 0;
+      const $ = (id) => document.getElementById(id);
+      const show = (n) => {
+        i = (n + videos.length) % videos.length;
+        const v = videos[i];
+        if (current) { current.set(false); current = null; }
+        reel.innerHTML = "";
+        reel.classList.toggle("is-vertical", !!v.poster && v.src.type === "file");
+        reel.appendChild(makePlayer(v));
+        $("reel-title").textContent = v.title;
+        $("reel-cat").textContent = v.category || "";
+        $("reel-desc").textContent = v.description || "";
+        $("reel-count").textContent = `${i + 1} / ${videos.length}`;
+      };
+      $("reel-prev").addEventListener("click", () => show(i - 1));
+      $("reel-next").addEventListener("click", () => show(i + 1));
+      if (videos.length < 2) section.querySelectorAll(".arrow, .reel-count").forEach((e) => (e.hidden = true));
+      // Flèches du clavier quand le carrousel a le focus
+      section.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") { e.preventDefault(); show(i - 1); }
+        if (e.key === "ArrowRight") { e.preventDefault(); show(i + 1); }
+      });
+      // Glisser du doigt sur mobile
+      let x0 = null;
+      reel.addEventListener("touchstart", (e) => (x0 = e.touches[0].clientX), { passive: true });
+      reel.addEventListener("touchend", (e) => {
+        if (x0 === null) return;
+        const dx = e.changedTouches[0].clientX - x0;
+        if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
+        x0 = null;
+      });
+      show(0);
     }
   }
 
