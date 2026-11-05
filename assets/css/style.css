@@ -78,6 +78,16 @@ h1, h2, h3, p, figure { margin: 0; }
 }
 .play svg { width: 18px; margin-left: 3px; }
 
+/* Lecteur épuré : l'iframe ne reçoit aucun clic, un seul bouton lecture / pause par-dessus */
+.live { position: absolute; inset: 0; background: #000; }
+.live iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; }
+.toggle { all: unset; position: absolute; inset: 0; cursor: pointer; display: grid; place-items: center; }
+.toggle:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+.toggle .play { opacity: 1; transition: opacity .2s ease; }
+.live.is-playing .toggle .play { opacity: 0; }
+.live.is-playing .toggle:hover .play, .live.is-playing .toggle:focus-visible .play { opacity: .9; }
+@media (hover: none) { .live.is-playing .toggle .play { opacity: 0; } }
+
 /* ---------- Sections ---------- */
 .section { padding-top: clamp(80px, 10vw, 140px); }
 .section-head {

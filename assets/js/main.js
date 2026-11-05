@@ -27,14 +27,32 @@
     } catch (e) {}
     return null;
   };
-  const embedSrc = (s) =>
-    s.type === "yt"
-      ? `https://www.youtube-nocookie.com/embed/${s.id}?autoplay=1&rel=0&playsinline=1`
-      : `https://player.vimeo.com/video/${s.id}?autoplay=1&dnt=1`;
+  // Lecteur épuré : son coupé, aucune commande YouTube/Vimeo, seulement lecture / pause
+  const embedSrc = (s) => {
+    if (s.type === "yt") {
+      const q = new URLSearchParams({
+        autoplay: 1, mute: 1, controls: 0, disablekb: 1, fs: 0, rel: 0,
+        playsinline: 1, iv_load_policy: 3, loop: 1, playlist: s.id,
+        enablejsapi: 1, origin: location.origin,
+      });
+      return `https://www.youtube-nocookie.com/embed/${s.id}?${q}`;
+    }
+    return `https://player.vimeo.com/video/${s.id}?autoplay=1&muted=1&controls=0&loop=1&dnt=1&title=0&byline=0&portrait=0`;
+  };
+  const command = (iframe, type, play) => {
+    const msg = type === "yt"
+      ? { event: "command", func: play ? "playVideo" : "pauseVideo", args: [] }
+      : { method: play ? "play" : "pause" };
+    iframe.contentWindow && iframe.contentWindow.postMessage(type === "yt" ? JSON.stringify(msg) : msg, "*");
+  };
 
-  const PLAY = '<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l16 9-16 9z" fill="#000"/></svg></span>';
+  const ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5l14 8.5-14 8.5z" fill="#000"/></svg>';
+  const ICON_PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="#000"/></svg>';
+  const PLAY = `<span class="play">${ICON_PLAY}</span>`;
 
-  // Miniature cliquable qui charge le lecteur seulement au clic (page légère, pas de cookies avant lecture)
+  let current = null; // une seule vidéo joue à la fois
+
+  // Miniature cliquable : le lecteur ne se charge qu'au clic (page légère, pas de cookies avant)
   const makePlayer = (video) => {
     const b = document.createElement("button");
     b.type = "button";
@@ -50,12 +68,35 @@
     }
     b.insertAdjacentHTML("beforeend", PLAY);
     b.addEventListener("click", () => {
+      const box = document.createElement("div");
+      box.className = "live is-playing";
       const f = document.createElement("iframe");
       f.src = embedSrc(video.src);
       f.title = video.title;
-      f.allow = "autoplay; fullscreen; picture-in-picture";
-      f.allowFullscreen = true;
-      b.replaceWith(f);
+      f.allow = "autoplay; picture-in-picture";
+      f.tabIndex = -1;
+      const t = document.createElement("button");
+      t.type = "button";
+      t.className = "toggle";
+      t.innerHTML = `<span class="play">${ICON_PAUSE}</span>`;
+      t.setAttribute("aria-label", "Mettre en pause : " + video.title);
+      const ctl = {
+        set(play) {
+          command(f, video.src.type, play);
+          box.classList.toggle("is-playing", play);
+          t.innerHTML = `<span class="play">${play ? ICON_PAUSE : ICON_PLAY}</span>`;
+          t.setAttribute("aria-label", (play ? "Mettre en pause : " : "Lire : ") + video.title);
+          if (play && current && current !== ctl) current.set(false);
+          if (play) current = ctl;
+        },
+        playing: () => box.classList.contains("is-playing"),
+      };
+      t.addEventListener("click", () => ctl.set(!ctl.playing()));
+      if (current) current.set(false);
+      current = ctl;
+      box.append(f, t);
+      b.replaceWith(box);
+      t.focus();
     });
     return b;
   };
