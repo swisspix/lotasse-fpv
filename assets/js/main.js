@@ -89,44 +89,73 @@
     }
   }
 
-  /* ---------- Grille des vidéos ---------- */
-  const grid = document.getElementById("video-grid");
-  if (grid) {
-    const section = document.getElementById("travaux");
-    if (!gridVideos.length) {
-      section.hidden = true;
-    } else {
-      const render = (cat) => {
-        grid.innerHTML = "";
-        gridVideos
-          .filter((v) => !cat || v.category === cat)
-          .forEach((v) => {
-            const fig = document.createElement("figure");
-            fig.className = "video";
-            fig.innerHTML = '<div class="frame"></div><figcaption><strong style="font-weight:400"></strong><span></span></figcaption>';
-            fig.querySelector(".frame").appendChild(makePlayer(v));
-            fig.querySelector("strong").textContent = v.title;
-            fig.querySelector("figcaption span").textContent = v.category || "";
-            grid.appendChild(fig);
-          });
-      };
-      const filters = document.getElementById("video-filters");
-      const cats = [...new Set(gridVideos.map((v) => v.category).filter(Boolean))];
-      if (filters && cats.length > 1) {
-        ["Tout", ...cats].forEach((c, i) => {
-          const b = document.createElement("button");
-          b.type = "button";
-          b.textContent = c;
-          b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
-          b.addEventListener("click", () => {
-            filters.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", "false"));
-            b.setAttribute("aria-pressed", "true");
-            render(i === 0 ? null : c);
-          });
-          filters.appendChild(b);
+  /* ---------- Grilles de vidéos (accueil + page Vidéos) ---------- */
+  const card = (v) => {
+    const fig = document.createElement("figure");
+    fig.className = "video";
+    fig.innerHTML = '<div class="frame"></div><figcaption><strong></strong><span></span></figcaption>';
+    fig.querySelector(".frame").appendChild(makePlayer(v));
+    fig.querySelector("strong").textContent = v.title;
+    fig.querySelector("figcaption span").textContent = v.category || "";
+    return fig;
+  };
+
+  const setupGrid = (grid, list, filters, { limit = 0, urlParam = false } = {}) => {
+    const cats = [...new Set(list.map((v) => v.category).filter(Boolean))];
+    const count = document.getElementById("video-count");
+    const render = (cat) => {
+      grid.innerHTML = "";
+      let shown = list.filter((v) => !cat || v.category === cat);
+      if (limit) shown = shown.slice(0, limit);
+      shown.forEach((v) => grid.appendChild(card(v)));
+      if (count) count.textContent = shown.length + (shown.length > 1 ? " vidéos" : " vidéo");
+    };
+    let initial = null;
+    if (urlParam) {
+      const c = new URLSearchParams(location.search).get("categorie");
+      if (c && cats.includes(c)) initial = c;
+    }
+    if (filters && cats.length > 1) {
+      ["Tout", ...cats].forEach((c, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = c;
+        const active = (i === 0 && !initial) || c === initial;
+        b.setAttribute("aria-pressed", active ? "true" : "false");
+        b.addEventListener("click", () => {
+          filters.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", "false"));
+          b.setAttribute("aria-pressed", "true");
+          const cat = i === 0 ? null : c;
+          if (urlParam) {
+            const u = new URL(location.href);
+            cat ? u.searchParams.set("categorie", cat) : u.searchParams.delete("categorie");
+            history.replaceState(null, "", u);
+          }
+          render(cat);
         });
-      }
-      render(null);
+        filters.appendChild(b);
+      });
+    }
+    render(initial);
+  };
+
+  // Accueil : 3 vidéos récentes + lien vers la page Vidéos
+  const homeGrid = document.getElementById("video-grid");
+  if (homeGrid) {
+    const section = document.getElementById("travaux");
+    if (!gridVideos.length) section.hidden = true;
+    else setupGrid(homeGrid, gridVideos, null, { limit: 3 });
+  }
+
+  // Page Vidéos : toutes les vidéos, filtrables
+  const allGrid = document.getElementById("all-videos");
+  if (allGrid) {
+    if (!videos.length) {
+      document.getElementById("videos-empty").hidden = false;
+      allGrid.hidden = true;
+      document.querySelector(".toolbar").hidden = true;
+    } else {
+      setupGrid(allGrid, videos, document.getElementById("video-filters"), { urlParam: true });
     }
   }
 
