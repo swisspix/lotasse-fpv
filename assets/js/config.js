@@ -24,15 +24,7 @@ window.SITE_CONFIG = {
   // "category" est libre (ex. Immobilier, Événement, Sport…)
   // ---------------------------------------------------------
   videos: [
-    {
-      title: "Exemple — remplacez par votre première vidéo",
-      category: "Showreel",
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    }
-    // ,{
-    //   title: "Survol d'un chalet à Verbier",
-    //   category: "Immobilier",
-    //   url: "https://youtu.be/XXXXXXXXXXX"
-    // }
+    // { title: "Showreel 2026", category: "Showreel", url: "https://youtu.be/XXXXXXXXXXX" },
+    // { title: "Chalet à Verbier", category: "Immobilier", url: "https://youtu.be/XXXXXXXXXXX" }
   ]
 };

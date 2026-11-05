@@ -64,7 +64,6 @@ h1, h2, h3, p, figure { margin: 0; }
 .showreel { position: relative; background: var(--placeholder); aspect-ratio: 16 / 9; max-height: 86vh; width: 100%; overflow: hidden; }
 .showreel video, .showreel iframe, .showreel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; }
 .showreel-caption { display: flex; justify-content: space-between; gap: 16px; padding-top: 14px; font-size: .9rem; color: var(--muted); }
-@media (max-width: 560px) { .showreel { aspect-ratio: 4 / 5; } }
 
 /* Lecteur à la demande (miniature + bouton) */
 .player { all: unset; position: absolute; inset: 0; cursor: pointer; display: grid; place-items: center; }
@@ -102,7 +101,7 @@ h1, h2, h3, p, figure { margin: 0; }
 }
 @media (max-width: 960px) { .video-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .video-grid { grid-template-columns: 1fr; } }
-.video .frame { position: relative; aspect-ratio: 4 / 3; background: var(--placeholder); overflow: hidden; }
+.video .frame { position: relative; aspect-ratio: 16 / 9; background: var(--placeholder); overflow: hidden; }
 .video .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .video .frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .video figcaption { display: flex; justify-content: space-between; gap: 12px; padding-top: 14px; font-size: .95rem; }
