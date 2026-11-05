@@ -60,7 +60,119 @@
   let current = null; // une seule vidéo joue à la fois
 
   // Miniature cliquable : le lecteur ne se charge qu'au clic (page légère, pas de cookies avant)
-  const makePlayer = (video) => {
+  // Construit un lecteur épuré (son coupé, lecture / pause, plein écran)
+  const buildLive = (video, imgEl) => {
+    const box = document.createElement("div");
+    box.className = "live is-playing is-loading";
+    let f;
+    if (video.src.type === "file") {
+      f = document.createElement("video");
+      Object.assign(f, { src: video.src.id, muted: true, loop: true, playsInline: true, autoplay: true, preload: "auto" });
+      f.setAttribute("muted", "");
+      if (video.poster) f.poster = video.poster;
+      if (video.start) f.currentTime = Number(video.start);
+      f.addEventListener("playing", () => box.classList.remove("is-loading"));
+      f.addEventListener("pause", () => box.classList.add("is-loading"));
+      box.classList.add("is-file");
+    } else {
+      f = document.createElement("iframe");
+      f.src = embedSrc(video.src, Number(video.start) || 0);
+      f.allow = "autoplay; picture-in-picture";
+    }
+    f.title = video.title;
+    f.tabIndex = -1;
+    // Image de couverture affichée tant que la vidéo ne tourne pas : masque l'interface YouTube
+    const poster = document.createElement("div");
+    poster.className = "poster";
+    const img = imgEl;
+    if (img) poster.appendChild(img.cloneNode());
+    const t = document.createElement("button");
+    t.type = "button";
+    t.className = "toggle";
+    t.innerHTML = `<span class="play">${ICON_PAUSE}</span>`;
+    t.setAttribute("aria-label", "Mettre en pause : " + video.title);
+    const ctl = {
+      set(play) {
+        command(f, video.src.type, play);
+        box.classList.toggle("is-playing", play);
+        if (!play) box.classList.add("is-loading");
+        t.innerHTML = `<span class="play">${play ? ICON_PAUSE : ICON_PLAY}</span>`;
+        t.setAttribute("aria-label", (play ? "Mettre en pause : " : "Lire : ") + video.title);
+        if (play && current && current !== ctl) current.set(false);
+        if (play) current = ctl;
+      },
+      playing: () => box.classList.contains("is-playing"),
+    };
+    // L'état réel du lecteur YouTube : on retire la couverture dès que l'image bouge
+    if (video.src.type === "yt") {
+      f.addEventListener("load", () => {
+        f.contentWindow.postMessage(JSON.stringify({ event: "listening", id: video.src.id }), "*");
+      });
+      window.addEventListener("message", (m) => {
+        if (m.source !== f.contentWindow) return;
+        let d; try { d = typeof m.data === "string" ? JSON.parse(m.data) : m.data; } catch (e) { return; }
+        const st = d && (d.event === "onStateChange" ? d.info : d.info && d.info.playerState);
+        if (st === 1) box.classList.remove("is-loading");
+        if (st === 2) box.classList.add("is-loading");
+      });
+    } else if (video.src.type !== "file") {
+      setTimeout(() => box.classList.remove("is-loading"), 1500);
+    }
+    t.addEventListener("click", () => {
+      const play = !ctl.playing();
+      ctl.set(play);
+      if (play && video.src.type === "vimeo") box.classList.remove("is-loading");
+    });
+    // Bouton plein écran
+    const fs = document.createElement("button");
+    fs.type = "button";
+    fs.className = "fs-btn";
+    fs.setAttribute("aria-label", "Plein écran : " + video.title);
+    fs.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+    fs.addEventListener("click", () => {
+      const el = box;
+      const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+      if (isFs) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      else if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      else if (f.webkitEnterFullscreen) f.webkitEnterFullscreen(); // iPhone : vidéo du site
+    });
+    if (current) current.set(false);
+    current = ctl;
+    box.append(f, poster, t, fs);
+    return { box, t, ctl };
+  };
+
+  // Fenêtre de lecture en grand (page Vidéos)
+  let modal = null;
+  const openModal = (video, imgEl) => {
+    if (!modal) {
+      modal = document.createElement("dialog");
+      modal.className = "vmodal";
+      modal.innerHTML = '<div class="vmodal-bar"><strong class="vmodal-title"></strong><button type="button" class="vmodal-close" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.8"/></svg></button></div><div class="vmodal-stage"></div>';
+      document.body.appendChild(modal);
+      const close = () => modal.close();
+      modal.querySelector(".vmodal-close").addEventListener("click", close);
+      modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+      modal.addEventListener("close", () => {
+        if (current) current.set(false);
+        current = null;
+        modal.querySelector(".vmodal-stage").innerHTML = "";
+        if (modal._opener) modal._opener.focus();
+      });
+    }
+    const stage = modal.querySelector(".vmodal-stage");
+    stage.innerHTML = "";
+    stage.classList.toggle("is-vertical", video.src.type === "file");
+    modal.querySelector(".vmodal-title").textContent = video.title;
+    const { box, t } = buildLive(video, imgEl);
+    stage.appendChild(box);
+    modal._opener = document.activeElement;
+    modal.showModal();
+    t.focus({ preventScroll: true });
+  };
+
+  const makePlayer = (video, opts = {}) => {
     const b = document.createElement("button");
     b.type = "button";
     b.className = "player";
@@ -101,70 +213,9 @@
       return b;
     }
     b.addEventListener("click", (ev) => {
-      const box = document.createElement("div");
-      box.className = "live is-playing is-loading";
-      let f;
-      if (video.src.type === "file") {
-        f = document.createElement("video");
-        Object.assign(f, { src: video.src.id, muted: true, loop: true, playsInline: true, autoplay: true, preload: "auto" });
-        f.setAttribute("muted", "");
-        if (video.poster) f.poster = video.poster;
-        if (video.start) f.currentTime = Number(video.start);
-        f.addEventListener("playing", () => box.classList.remove("is-loading"));
-        f.addEventListener("pause", () => box.classList.add("is-loading"));
-        box.classList.add("is-file");
-      } else {
-        f = document.createElement("iframe");
-        f.src = embedSrc(video.src, Number(video.start) || 0);
-        f.allow = "autoplay; picture-in-picture";
-      }
-      f.title = video.title;
-      f.tabIndex = -1;
-      // Image de couverture affichée tant que la vidéo ne tourne pas : masque l'interface YouTube
-      const poster = document.createElement("div");
-      poster.className = "poster";
       const img = b.querySelector("img");
-      if (img) poster.appendChild(img.cloneNode());
-      const t = document.createElement("button");
-      t.type = "button";
-      t.className = "toggle";
-      t.innerHTML = `<span class="play">${ICON_PAUSE}</span>`;
-      t.setAttribute("aria-label", "Mettre en pause : " + video.title);
-      const ctl = {
-        set(play) {
-          command(f, video.src.type, play);
-          box.classList.toggle("is-playing", play);
-          if (!play) box.classList.add("is-loading");
-          t.innerHTML = `<span class="play">${play ? ICON_PAUSE : ICON_PLAY}</span>`;
-          t.setAttribute("aria-label", (play ? "Mettre en pause : " : "Lire : ") + video.title);
-          if (play && current && current !== ctl) current.set(false);
-          if (play) current = ctl;
-        },
-        playing: () => box.classList.contains("is-playing"),
-      };
-      // L'état réel du lecteur YouTube : on retire la couverture dès que l'image bouge
-      if (video.src.type === "yt") {
-        f.addEventListener("load", () => {
-          f.contentWindow.postMessage(JSON.stringify({ event: "listening", id: video.src.id }), "*");
-        });
-        window.addEventListener("message", (m) => {
-          if (m.source !== f.contentWindow) return;
-          let d; try { d = typeof m.data === "string" ? JSON.parse(m.data) : m.data; } catch (e) { return; }
-          const st = d && (d.event === "onStateChange" ? d.info : d.info && d.info.playerState);
-          if (st === 1) box.classList.remove("is-loading");
-          if (st === 2) box.classList.add("is-loading");
-        });
-      } else if (video.src.type !== "file") {
-        setTimeout(() => box.classList.remove("is-loading"), 1500);
-      }
-      t.addEventListener("click", () => {
-        const play = !ctl.playing();
-        ctl.set(play);
-        if (play && video.src.type === "vimeo") box.classList.remove("is-loading");
-      });
-      if (current) current.set(false);
-      current = ctl;
-      box.append(f, poster, t);
+      if (opts.modal) return openModal(video, img);
+      const { box, t } = buildLive(video, img);
       b.replaceWith(box);
       if (ev.detail === 0) t.focus(); // focus seulement au clavier
     });
@@ -218,11 +269,11 @@
   }
 
   /* ---------- Grilles de vidéos (accueil + page Vidéos) ---------- */
-  const card = (v) => {
+  const card = (v, opts = {}) => {
     const fig = document.createElement("figure");
     fig.className = "video";
     fig.innerHTML = '<div class="frame"></div><figcaption><strong></strong><span></span></figcaption><p class="desc"></p>';
-    fig.querySelector(".frame").appendChild(makePlayer(v));
+    fig.querySelector(".frame").appendChild(makePlayer(v, opts));
     fig.querySelector("strong").textContent = v.title;
     fig.querySelector("figcaption span").textContent = v.category || "";
     const desc = fig.querySelector(".desc");
@@ -230,14 +281,14 @@
     return fig;
   };
 
-  const setupGrid = (grid, list, filters, { limit = 0, urlParam = false } = {}) => {
+  const setupGrid = (grid, list, filters, { limit = 0, urlParam = false, modal = false } = {}) => {
     const cats = [...new Set(list.map((v) => v.category).filter(Boolean))];
     const count = document.getElementById("video-count");
     const render = (cat) => {
       grid.innerHTML = "";
       let shown = list.filter((v) => !cat || v.category === cat);
       if (limit) shown = shown.slice(0, limit);
-      shown.forEach((v) => grid.appendChild(card(v)));
+      shown.forEach((v) => grid.appendChild(card(v, { modal })));
       if (count) count.textContent = shown.length + (shown.length > 1 ? " vidéos" : " vidéo");
     };
     let initial = null;
@@ -285,7 +336,7 @@
       allGrid.hidden = true;
       document.querySelector(".toolbar").hidden = true;
     } else {
-      setupGrid(allGrid, videos, document.getElementById("video-filters"), { urlParam: true });
+      setupGrid(allGrid, videos, document.getElementById("video-filters"), { urlParam: true, modal: true });
     }
   }
   };
