@@ -33,6 +33,12 @@ window.SITE_CONFIG = {
   // ---------------------------------------------------------
   videos: [
     {
+      title: "Visite d'appartement",
+      category: "Visites en un seul plan",
+      description: "Un seul plan continu à travers l'appartement : entrée, salle de bain, puis le séjour ouvert sur la cuisine.",
+      url: "https://youtu.be/aDxbl25mkjQ"
+    },
+    {
       title: "Hyundai — Châtel",
       category: "Clips et publicité",
       description: "Poursuite d'une Hyundai sur une route de col : le drone colle à la voiture dans les lacets, entre forêt et voie ferrée.",
@@ -52,12 +58,6 @@ window.SITE_CONFIG = {
       url: "https://www.youtube.com/watch?v=u-jIxZrmmrw"
     },
     {
-      title: "Visite d'appartement",
-      category: "Visites en un seul plan",
-      description: "Un seul plan continu à travers l'appartement : entrée, salle de bain, puis le séjour ouvert sur la cuisine.",
-      url: "https://youtu.be/aDxbl25mkjQ"
-    }
-    ,{
       title: "Trail Blonay – St-Légier 2025",
       category: "Clips et publicité",
       description: "Annonce de la course du 17 mai 2025 : vol en rase-mottes sur les pâturages au-dessus du Léman, jusqu'aux coureurs.",
