@@ -8,7 +8,7 @@ window.SITE_CONFIG = {
   email: "contact@lotasse-fpv.ch",
 
   // Clé Web3Forms reçue par e-mail sur contact@lotasse-fpv.ch (formulaire de contact)
-  formKey: "",
+  formKey: "922b38ad-96e0-4000-9821-cebafccfef95",
 
   // Vidéo de fond du bandeau d'accueil (facultatif).
   // Déposez un fichier MP4 court et léger (idéalement < 8 Mo, sans son)
