@@ -24,31 +24,32 @@ window.SITE_CONFIG = {
   //   https://youtu.be/XXXX
   //   https://www.youtube.com/shorts/XXXX
   //   https://vimeo.com/123456789
-  // "category" est libre (ex. Immobilier, Événement, Sport…)
+  // "category" : reprendre un des services du site pour que les filtres restent cohérents :
+  //   "Visites en un seul plan", "Sport et outdoor", "Événements", "Clips et publicité"
   // "description" : une phrase affichée sous la vidéo (facultatif)
   // ---------------------------------------------------------
   videos: [
     {
       title: "Hyundai — Châtel",
-      category: "Automobile",
+      category: "Clips et publicité",
       description: "Poursuite d'une Hyundai sur une route de col : le drone colle à la voiture dans les lacets, entre forêt et voie ferrée.",
       url: "https://www.youtube.com/watch?v=K6g6iPONp0s"
     },
     {
       title: "Cornettes de Bise",
-      category: "Montagne",
+      category: "Sport et outdoor",
       description: "Vol en rase-mottes sur les pâturages puis le long des crêtes rocheuses des Cornettes de Bise, dans les Préalpes.",
       url: "https://www.youtube.com/watch?v=AEcJ6QWoRsE"
     },
     {
       title: "Île de la Réunion — Volcan",
-      category: "Voyage",
+      category: "Sport et outdoor",
       description: "Au ras des coulées de lave du Piton de la Fournaise, jusqu'à l'équipe restée au bord de la route.",
       url: "https://www.youtube.com/watch?v=u-jIxZrmmrw"
     },
     {
       title: "Visite d'appartement",
-      category: "Immobilier",
+      category: "Visites en un seul plan",
       description: "Un seul plan continu à travers l'appartement : entrée, salle de bain, puis le séjour ouvert sur la cuisine.",
       url: "https://youtu.be/aDxbl25mkjQ"
     }
