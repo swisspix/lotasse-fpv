@@ -57,9 +57,9 @@ window.SITE_CONFIG = {
       url: "https://youtu.be/aDxbl25mkjQ"
     }
     ,{
-      title: "Trail de Blonay 2025",
+      title: "Trail Blonay – St-Légier 2025",
       category: "Clips et publicité",
-      description: "Reel publicitaire tourné pour le trail de Blonay en 2025.",
+      description: "Reel publicitaire pour le Trail Blonay – St-Légier 2025, « la montagne au centre », réalisé avec l'organisation de la course.",
       url: "https://www.instagram.com/reel/DIecsJRI0m8/"
     }
     // ,{ title: "Titre", category: "Catégorie", description: "Une phrase.", url: "https://youtu.be/XXXXXXXXXXX" }
