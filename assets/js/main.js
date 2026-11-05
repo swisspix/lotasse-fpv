@@ -61,10 +61,13 @@
     b.setAttribute("aria-label", "Lire la vidéo : " + video.title);
     if (video.src.type === "yt") {
       const img = document.createElement("img");
-      img.src = `https://i.ytimg.com/vi/${video.src.id}/hqdefault.jpg`;
+      // Miniature YouTube en haute définition, repli sur la version standard si elle n'existe pas
+      const hq = `https://i.ytimg.com/vi/${video.src.id}/hqdefault.jpg`;
+      img.src = `https://i.ytimg.com/vi/${video.src.id}/maxresdefault.jpg`;
       img.alt = "";
       img.loading = "lazy";
-      img.onerror = () => img.remove();
+      img.onload = () => { if (img.naturalWidth <= 120 && img.src !== hq) img.src = hq; };
+      img.onerror = () => { if (img.src !== hq) img.src = hq; else img.remove(); };
       b.appendChild(img);
     }
     b.insertAdjacentHTML("beforeend", PLAY);
