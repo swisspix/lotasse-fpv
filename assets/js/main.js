@@ -67,14 +67,19 @@
       b.appendChild(img);
     }
     b.insertAdjacentHTML("beforeend", PLAY);
-    b.addEventListener("click", () => {
+    b.addEventListener("click", (ev) => {
       const box = document.createElement("div");
-      box.className = "live is-playing";
+      box.className = "live is-playing is-loading";
       const f = document.createElement("iframe");
       f.src = embedSrc(video.src);
       f.title = video.title;
       f.allow = "autoplay; picture-in-picture";
       f.tabIndex = -1;
+      // Image de couverture affichée tant que la vidéo ne tourne pas : masque l'interface YouTube
+      const poster = document.createElement("div");
+      poster.className = "poster";
+      const img = b.querySelector("img");
+      if (img) poster.appendChild(img.cloneNode());
       const t = document.createElement("button");
       t.type = "button";
       t.className = "toggle";
@@ -84,6 +89,7 @@
         set(play) {
           command(f, video.src.type, play);
           box.classList.toggle("is-playing", play);
+          if (!play) box.classList.add("is-loading");
           t.innerHTML = `<span class="play">${play ? ICON_PAUSE : ICON_PLAY}</span>`;
           t.setAttribute("aria-label", (play ? "Mettre en pause : " : "Lire : ") + video.title);
           if (play && current && current !== ctl) current.set(false);
@@ -91,12 +97,31 @@
         },
         playing: () => box.classList.contains("is-playing"),
       };
-      t.addEventListener("click", () => ctl.set(!ctl.playing()));
+      // L'état réel du lecteur YouTube : on retire la couverture dès que l'image bouge
+      if (video.src.type === "yt") {
+        f.addEventListener("load", () => {
+          f.contentWindow.postMessage(JSON.stringify({ event: "listening", id: video.src.id }), "*");
+        });
+        window.addEventListener("message", (m) => {
+          if (m.source !== f.contentWindow) return;
+          let d; try { d = typeof m.data === "string" ? JSON.parse(m.data) : m.data; } catch (e) { return; }
+          const st = d && (d.event === "onStateChange" ? d.info : d.info && d.info.playerState);
+          if (st === 1) box.classList.remove("is-loading");
+          if (st === 2) box.classList.add("is-loading");
+        });
+      } else {
+        setTimeout(() => box.classList.remove("is-loading"), 1500);
+      }
+      t.addEventListener("click", () => {
+        const play = !ctl.playing();
+        ctl.set(play);
+        if (play && video.src.type !== "yt") box.classList.remove("is-loading");
+      });
       if (current) current.set(false);
       current = ctl;
-      box.append(f, t);
+      box.append(f, poster, t);
       b.replaceWith(box);
-      t.focus();
+      if (ev.detail === 0) t.focus(); // focus seulement au clavier
     });
     return b;
   };
