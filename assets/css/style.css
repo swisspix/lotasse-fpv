@@ -91,6 +91,12 @@ h1, h2, h3, p, figure { margin: 0; }
 .live.is-playing .toggle:hover .play, .live.is-playing .toggle:focus-visible .play { opacity: .9; }
 @media (hover: none) { .live.is-playing:not(.is-loading) .toggle .play { opacity: 0; } }
 
+/* Reel Instagram : lecteur vertical d'Instagram, affiché au clic */
+.player.is-ig { background: var(--placeholder); }
+.ig-label { position: absolute; left: 16px; bottom: 14px; font-size: .85rem; color: var(--muted); }
+.video .frame.is-tall, .is-tall { aspect-ratio: auto !important; height: min(760px, 92vh); background: #fff; display: flex; justify-content: center; }
+.is-tall .ig-embed { position: static !important; width: min(400px, 100%) !important; height: 100% !important; border: 1px solid var(--line) !important; }
+
 /* ---------- Sections ---------- */
 .section { padding-top: clamp(80px, 10vw, 140px); }
 .section-head {

@@ -24,6 +24,7 @@ window.SITE_CONFIG = {
   //   https://youtu.be/XXXX
   //   https://www.youtube.com/shorts/XXXX
   //   https://vimeo.com/123456789
+  //   https://www.instagram.com/reel/XXXX/ (lecteur Instagram, son et commandes d'Instagram)
   // "category" : reprendre un des services du site pour que les filtres restent cohérents :
   //   "Visites en un seul plan", "Sport et outdoor", "Événements", "Clips et publicité"
   // "description" : une phrase affichée sous la vidéo (facultatif)
@@ -54,6 +55,12 @@ window.SITE_CONFIG = {
       category: "Visites en un seul plan",
       description: "Un seul plan continu à travers l'appartement : entrée, salle de bain, puis le séjour ouvert sur la cuisine.",
       url: "https://youtu.be/aDxbl25mkjQ"
+    }
+    ,{
+      title: "Trail de Blonay 2025",
+      category: "Clips et publicité",
+      description: "Reel publicitaire tourné pour le trail de Blonay en 2025.",
+      url: "https://www.instagram.com/reel/DIecsJRI0m8/"
     }
     // ,{ title: "Titre", category: "Catégorie", description: "Une phrase.", url: "https://youtu.be/XXXXXXXXXXX" }
   ]

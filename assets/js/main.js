@@ -20,6 +20,10 @@
         const m = u.pathname.match(/\/(shorts|embed|live)\/([\w-]+)/);
         if (m) return { type: "yt", id: m[2] };
       }
+      if (h.endsWith("instagram.com")) {
+        const m = u.pathname.match(/\/(reel|p|tv)\/([\w-]+)/);
+        if (m) return { type: "ig", id: m[2], kind: m[1] };
+      }
       if (h.endsWith("vimeo.com")) {
         const m = u.pathname.match(/(\d+)/);
         if (m) return { type: "vimeo", id: m[1] };
@@ -71,6 +75,23 @@
       b.appendChild(img);
     }
     b.insertAdjacentHTML("beforeend", PLAY);
+    if (video.src.type === "ig") {
+      b.classList.add("is-ig");
+      b.insertAdjacentHTML("afterbegin", '<span class="ig-label">Reel Instagram</span>');
+      b.addEventListener("click", () => {
+        // Instagram n'autorise ni son coupé ni commandes personnalisées : on affiche son lecteur en vertical
+        const f = document.createElement("iframe");
+        f.src = `https://www.instagram.com/${video.src.kind}/${video.src.id}/embed`;
+        f.title = video.title;
+        f.allow = "autoplay; encrypted-media";
+        f.className = "ig-embed";
+        const frame = b.parentElement;
+        frame.classList.add("is-tall");
+        if (current) current.set(false);
+        b.replaceWith(f);
+      });
+      return b;
+    }
     b.addEventListener("click", (ev) => {
       const box = document.createElement("div");
       box.className = "live is-playing is-loading";
