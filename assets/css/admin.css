@@ -43,3 +43,10 @@
   .vthumb { width: 88px; }
   .vactions { grid-column: 1 / -1; justify-content: flex-start; }
 }
+
+/* Bandeau d'état de la mise en ligne */
+.live-state { padding: 12px 16px; margin-bottom: 16px; border-left: 3px solid var(--line); background: #f6f7f8; font-size: .95rem; }
+.live-state:empty { display: none; }
+.live-state[data-state="ok"] { border-color: #1d6b38; background: #eef6f0; color: #1d6b38; }
+.live-state[data-state="wait"] { border-color: #a15c00; background: #fbf4e8; color: #6b3d00; }
+.live-state[data-state="draft"] { border-color: var(--ink); }

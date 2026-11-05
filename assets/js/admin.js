@@ -73,8 +73,43 @@
   };
   const markDirty = () => {
     dirty = true;
+    clearTimeout(watchTimer);
+    setLive("draft", "Changements non publiés : le site affiche encore l'ancienne version.");
     $("publish").disabled = false;
-    setStatus("Changements non publiés");
+    setStatus("");
+  };
+
+  // ---------- Suivi de la mise en ligne ----------
+  // Le site (GitHub Pages) se reconstruit après chaque publication : on compare le fichier en ligne à celui publié
+  const norm = (list) => JSON.stringify(list);
+  const fetchLive = async () => {
+    const r = await fetch(`data/videos.json?live=${Date.now()}`, { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  };
+  let watchTimer = null;
+  const setLive = (state, text) => {
+    const el = $("live");
+    el.dataset.state = state;
+    el.textContent = text;
+  };
+  const watchLive = (expected, startedAt = Date.now()) => {
+    clearTimeout(watchTimer);
+    const tick = async () => {
+      const secs = Math.round((Date.now() - startedAt) / 1000);
+      try {
+        const live = await fetchLive();
+        if (norm(live) === norm(expected)) {
+          setLive("ok", "En ligne : le site affiche la dernière version.");
+          return;
+        }
+      } catch (e) {}
+      setLive("wait", secs < 300
+        ? `Mise en ligne en cours… le site n'affiche pas encore cette version (${secs} s). Tu peux fermer cette page, ça continue tout seul.`
+        : "La mise en ligne prend plus longtemps que d'habitude. Ça arrive quand GitHub est chargé : vérifie dans quelques minutes.");
+      watchTimer = setTimeout(tick, 8000);
+    };
+    tick();
   };
 
   // ---------- Écrans ----------
@@ -102,6 +137,7 @@
       setStatus("");
       showManager();
       render();
+      watchLive(videos);
     } catch (e) {
       if (e.status === 401 || e.status === 403 || e.status === 404) {
         store.clear();
@@ -271,7 +307,8 @@
       });
       sha = res.content.sha;
       dirty = false;
-      setStatus("Publié. Le site sera à jour d'ici 1 à 2 minutes.", "ok");
+      setStatus("Enregistré.", "ok");
+      watchLive(JSON.parse(JSON.stringify(videos)));
     } catch (e) {
       btn.disabled = false;
       if (e.status === 409) setStatus("La liste a changé ailleurs entre-temps. Recharge la page puis refais tes changements.", "err");
