@@ -8,89 +8,81 @@
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-<header class="site-head solid">
+<header class="site-head">
   <div class="wrap">
-    <a class="brand" href="./">
-      <img class="brand-mark" src="assets/img/favicon.svg" alt="">
-      lotasse-fpv
-    </a>
+    <a class="brand" href="./">lotasse-fpv</a>
     <nav class="nav" aria-label="Navigation principale">
-      <a href="./#services">Services</a>
-      <a href="./#videos">Vidéos</a>
-      <a href="./#deroule">Déroulé</a>
-      <a class="nav-cta" href="contact.html" aria-current="page">Contact</a>
+      <a href="./#travaux">Travaux</a>
+      <a class="hide-sm" href="./#services">Services</a>
+      <a class="hide-sm" href="./#deroule">Déroulé</a>
+      <a href="contact.html" aria-current="page">Contact</a>
     </nav>
   </div>
 </header>
 
-<main class="contact-page">
-  <section style="padding-top:0">
-    <div class="wrap contact-grid">
-      <div>
-        <h2>Parlons de votre projet</h2>
-        <p class="lead" style="margin-top:18px">Décrivez le lieu, la date et ce que vous voulez montrer. Je réponds en général sous 48 heures.</p>
-        <a class="mail-direct" data-email href="#"></a>
-      </div>
+<main class="wrap">
+  <section class="contact">
+    <div class="contact-intro">
+      <h1>Parlons de votre projet.</h1>
+      <p>Décrivez le lieu, la date et ce que vous voulez montrer. Je réponds en général sous 48 heures.</p>
+      <a class="mail-direct" data-email href="mailto:contact@lotasse-fpv.ch">contact@lotasse-fpv.ch</a>
+    </div>
 
-      <form class="form" id="contact-form" novalidate>
-        <div class="field-row">
-          <div class="field">
-            <label for="name">Nom</label>
-            <input id="name" name="name" autocomplete="name" required>
-          </div>
-          <div class="field">
-            <label for="email">E-mail</label>
-            <input id="email" name="email" type="email" autocomplete="email" required>
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="phone">Téléphone (facultatif)</label>
-            <input id="phone" name="phone" type="tel" autocomplete="tel">
-          </div>
-          <div class="field">
-            <label for="type">Type de projet</label>
-            <select id="type" name="type" required>
-              <option>Visite immersive</option>
-              <option>Sport / outdoor</option>
-              <option>Événement</option>
-              <option>Clip / publicité</option>
-              <option>Autre</option>
-            </select>
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="date">Date ou période</label>
-            <input id="date" name="date" placeholder="ex. juin 2027">
-          </div>
-          <div class="field">
-            <label for="place">Lieu</label>
-            <input id="place" name="place" placeholder="ex. Montreux">
-          </div>
+    <form class="form" id="contact-form" novalidate>
+      <div class="field-row">
+        <div class="field">
+          <label for="name">Nom</label>
+          <input id="name" name="name" autocomplete="name" required>
         </div>
         <div class="field">
-          <label for="message">Votre projet</label>
-          <textarea id="message" name="message" required></textarea>
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" required>
         </div>
-        <div>
-          <button class="btn" type="submit">Envoyer le message</button>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="phone">Téléphone (facultatif)</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel">
         </div>
-        <p class="form-note">Le bouton ouvre votre messagerie avec le message prêt à partir vers <a data-email href="#"></a>.</p>
-      </form>
-    </div>
+        <div class="field">
+          <label for="type">Type de projet</label>
+          <select id="type" name="type" required>
+            <option>Visite en un seul plan</option>
+            <option>Sport / outdoor</option>
+            <option>Événement</option>
+            <option>Clip / publicité</option>
+            <option>Autre</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="date">Date ou période</label>
+          <input id="date" name="date" placeholder="ex. juin 2027">
+        </div>
+        <div class="field">
+          <label for="place">Lieu</label>
+          <input id="place" name="place" placeholder="ex. Montreux">
+        </div>
+      </div>
+      <div class="field">
+        <label for="message">Votre projet</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+      <button class="btn" type="submit">Envoyer le message</button>
+      <p class="form-note">Le bouton ouvre votre messagerie avec le message prêt à partir vers <a data-email href="mailto:contact@lotasse-fpv.ch">contact@lotasse-fpv.ch</a>.</p>
+    </form>
   </section>
 </main>
 
 <footer class="site-foot">
   <div class="wrap">
-    <span>© <span data-year></span> lotasse-fpv · Lausanne, Suisse</span>
-    <a data-email href="#"></a>
+    <div class="legal"><span>© <span data-year>2026</span> lotasse-fpv</span><span>Lausanne, Suisse</span></div>
   </div>
 </footer>
 
