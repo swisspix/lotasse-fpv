@@ -171,7 +171,8 @@
     return b;
   };
 
-  const videos = (cfg.videos || []).map((v) => ({ ...v, src: parse(v.url) })).filter((v) => v.src);
+  const renderVideos = (list) => {
+  const videos = list.map((v) => ({ ...v, src: parse(v.url) })).filter((v) => v.src);
 
   /* ---------- Carrousel de l'accueil ---------- */
   const reel = document.getElementById("showreel");
@@ -287,6 +288,13 @@
       setupGrid(allGrid, videos, document.getElementById("video-filters"), { urlParam: true });
     }
   }
+  };
+
+  // Les vidéos sont dans data/videos.json (modifiable depuis la page admin)
+  fetch(`data/videos.json?t=${Math.floor(Date.now() / 60000)}`)
+    .then((r) => (r.ok ? r.json() : []))
+    .catch(() => [])
+    .then((list) => renderVideos(Array.isArray(list) ? list : []));
 
   /* ---------- Formulaire de contact (Web3Forms) ---------- */
   const form = document.getElementById("contact-form");

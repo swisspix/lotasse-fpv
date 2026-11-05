@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin vidéos — Lotasse FPV</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css?v=21">
+  <link rel="stylesheet" href="assets/css/admin.css?v=21">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="./">lotasse-fpv</a>
+    <nav class="nav" aria-label="Admin">
+      <a href="videos.html" target="_blank" rel="noopener">Voir le site</a>
+      <button type="button" class="link-btn" id="logout" hidden>Se déconnecter</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap admin">
+
+  <!-- Connexion -->
+  <section id="login" hidden>
+    <h1 class="admin-title">Admin des vidéos</h1>
+    <p class="admin-lead">Connecte-toi avec ta clé GitHub. Elle reste uniquement dans ce navigateur.</p>
+    <form class="admin-card" id="login-form">
+      <div class="field">
+        <label for="token">Clé GitHub (fine-grained token)</label>
+        <input id="token" type="password" autocomplete="off" spellcheck="false" required>
+      </div>
+      <button class="btn" type="submit">Se connecter</button>
+      <p class="admin-msg" id="login-msg" role="alert"></p>
+    </form>
+  </section>
+
+  <!-- Gestion -->
+  <section id="manager" hidden>
+    <div class="admin-head">
+      <div>
+        <h1 class="admin-title">Vidéos</h1>
+        <p class="admin-lead">Glisse les vidéos ou utilise les flèches pour changer l'ordre. La première ouvre le carrousel de l'accueil.</p>
+      </div>
+      <div class="publish">
+        <span class="admin-msg" id="status" role="status"></span>
+        <button class="btn" type="button" id="publish" disabled>Publier les changements</button>
+      </div>
+    </div>
+
+    <ol class="vlist" id="vlist"></ol>
+
+    <form class="admin-card" id="edit-form" novalidate>
+      <h2 class="admin-sub" id="form-title">Ajouter une vidéo</h2>
+      <div class="field">
+        <label for="f-url">Lien YouTube ou Vimeo *</label>
+        <input id="f-url" type="url" placeholder="https://www.youtube.com/watch?v=…" required>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="f-title">Titre *</label>
+          <input id="f-title" required>
+        </div>
+        <div class="field">
+          <label for="f-cat">Catégorie</label>
+          <select id="f-cat">
+            <option>Visites en un seul plan</option>
+            <option>Sport et outdoor</option>
+            <option>Événements</option>
+            <option>Clips et publicité</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-desc">Description</label>
+        <textarea id="f-desc" rows="3" placeholder="Une phrase affichée sous la vidéo"></textarea>
+      </div>
+      <div class="field" style="max-width:220px">
+        <label for="f-start">Démarrer à (secondes)</label>
+        <input id="f-start" type="number" min="0" step="1" placeholder="0">
+      </div>
+      <div class="form-actions">
+        <button class="btn" type="submit" id="f-submit">Ajouter à la liste</button>
+        <button class="btn-ghost" type="button" id="f-cancel" hidden>Annuler</button>
+      </div>
+      <p class="admin-msg" id="form-msg" role="alert"></p>
+    </form>
+  </section>
+</main>
+
+<script src="assets/js/admin.js?v=21"></script>
+</body>
+</html>

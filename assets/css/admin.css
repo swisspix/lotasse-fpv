@@ -1,0 +1,45 @@
+/* Page admin des vidéos */
+.admin { padding-block: clamp(24px, 4vw, 48px) 80px; }
+.admin-title { font-size: clamp(2rem, 4.4vw, 3.5rem); line-height: 1; font-weight: 500; letter-spacing: -0.035em; }
+.admin-sub { font-size: 1.4rem; font-weight: 500; letter-spacing: -0.02em; }
+.admin-lead { color: var(--muted); margin-top: 10px; max-width: 60ch; }
+.admin-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
+.publish { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.admin-msg { font-size: .95rem; color: var(--muted); }
+.admin-msg.err { color: #b00020; }
+.admin-msg.ok { color: #1d6b38; }
+.admin-card { border: 1px solid var(--line); padding: clamp(20px, 3vw, 32px); display: grid; gap: 24px; max-width: 760px; margin-top: 32px; }
+.form-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-ghost, .link-btn {
+  font: inherit; cursor: pointer; background: #fff; color: var(--ink);
+}
+.btn-ghost { border: 1px solid var(--ink); padding: 14px 26px; }
+.link-btn { border: 0; padding: 12px 0; font-size: .95rem; text-decoration: underline; text-underline-offset: 6px; }
+
+.vlist { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.vitem {
+  display: grid; grid-template-columns: 28px 120px minmax(0, 1fr) auto; gap: 16px; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid var(--line); background: #fff;
+}
+.vitem.dragging { opacity: .4; }
+.vitem.over { box-shadow: inset 0 2px 0 var(--ink); }
+.handle { cursor: grab; color: var(--muted); text-align: center; user-select: none; font-size: 1.2rem; }
+.vthumb { width: 120px; aspect-ratio: 16 / 9; background: var(--placeholder); object-fit: cover; display: block; }
+.vmeta { min-width: 0; }
+.vmeta strong { font-weight: 500; display: block; }
+.vmeta span { color: var(--muted); font-size: .9rem; }
+.vmeta p { color: var(--text-2); font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vactions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.vactions button {
+  font: inherit; font-size: .9rem; min-width: 44px; height: 40px; padding: 0 12px; cursor: pointer;
+  border: 1px solid var(--line); background: #fff; color: var(--ink);
+}
+.vactions button:hover { border-color: var(--ink); }
+.vactions .del:hover { border-color: #b00020; color: #b00020; }
+.vactions button:disabled { opacity: .35; cursor: default; }
+.vnum { color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) {
+  .vitem { grid-template-columns: 24px 88px minmax(0, 1fr); }
+  .vthumb { width: 88px; }
+  .vactions { grid-column: 1 / -1; justify-content: flex-start; }
+}
