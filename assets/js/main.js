@@ -129,14 +129,49 @@
     fs.className = "fs-btn";
     fs.setAttribute("aria-label", "Plein écran : " + video.title);
     fs.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+    // Plein écran : API native (Android, ordinateur, iPad), sinon plein écran « maison » (iPhone)
+    const EXPAND = fs.innerHTML;
+    const SHRINK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+    const nativeOk = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+    const isNativeFs = () => (document.fullscreenElement || document.webkitFullscreenElement) === box;
+    const isPseudoFs = () => box.classList.contains("pseudo-fs");
+    const paintFs = () => {
+      const on = isNativeFs() || isPseudoFs();
+      fs.innerHTML = on ? SHRINK : EXPAND;
+      fs.setAttribute("aria-label", (on ? "Quitter le plein écran : " : "Plein écran : ") + video.title);
+    };
+    const lockLandscape = () => {
+      // Une vidéo horizontale passe en paysage sur téléphone quand c'est possible (Android)
+      if (video.src.type !== "file" && screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(() => {});
+    };
+    const exitPseudo = () => {
+      box.classList.remove("pseudo-fs");
+      document.documentElement.classList.remove("has-pseudo-fs");
+      document.removeEventListener("keydown", onKey);
+      paintFs();
+    };
+    const onKey = (e) => { if (e.key === "Escape") exitPseudo(); };
+    const enterPseudo = () => {
+      box.classList.add("pseudo-fs");
+      document.documentElement.classList.add("has-pseudo-fs");
+      document.addEventListener("keydown", onKey);
+      paintFs();
+    };
     fs.addEventListener("click", () => {
-      const el = box;
-      const isFs = document.fullscreenElement || document.webkitFullscreenElement;
-      if (isFs) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
-      else if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
-      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-      else if (f.webkitEnterFullscreen) f.webkitEnterFullscreen(); // iPhone : vidéo du site
+      if (isNativeFs()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+      if (isPseudoFs()) { exitPseudo(); return; }
+      if (nativeOk) {
+        const req = box.requestFullscreen || box.webkitRequestFullscreen;
+        const r = req.call(box, { navigationUI: "hide" });
+        if (r && r.then) r.then(lockLandscape).catch(enterPseudo); else lockLandscape();
+      } else {
+        enterPseudo();
+      }
     });
+    ["fullscreenchange", "webkitfullscreenchange"].forEach((ev) => document.addEventListener(ev, () => {
+      paintFs();
+      if (!isNativeFs() && screen.orientation && screen.orientation.unlock) try { screen.orientation.unlock(); } catch (e) {}
+    }));
     if (current) current.set(false);
     current = ctl;
     box.append(f, poster, t, fs);
@@ -260,6 +295,7 @@
       reel.addEventListener("touchstart", (e) => (x0 = e.touches[0].clientX), { passive: true });
       reel.addEventListener("touchend", (e) => {
         if (x0 === null) return;
+        if (reel.querySelector(".pseudo-fs") || document.fullscreenElement || document.webkitFullscreenElement) { x0 = null; return; }
         const dx = e.changedTouches[0].clientX - x0;
         if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
         x0 = null;

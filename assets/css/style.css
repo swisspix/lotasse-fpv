@@ -155,6 +155,18 @@ h1, h2, h3, p, figure { margin: 0; }
 @media (hover: none) { .fs-btn { opacity: 1; } }
 .live:fullscreen, .live:-webkit-full-screen { background: #000; }
 .live:fullscreen video { object-fit: contain; background: #000; }
+/* Plein écran « maison » (iPhone) : la vidéo occupe tout l'écran, le reste de la page est figé */
+.live.pseudo-fs {
+  position: fixed; inset: 0; z-index: 1000; width: 100vw; height: 100vh; height: 100dvh;
+  background: #000; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.live.pseudo-fs video { object-fit: contain; background: #000; }
+.live.pseudo-fs .fs-btn { opacity: 1; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); }
+html.has-pseudo-fs, html.has-pseudo-fs body { overflow: hidden; }
+/* Sur écran tactile : boutons toujours visibles et plus faciles à toucher */
+@media (hover: none) {
+  .fs-btn { width: 48px; height: 48px; right: 10px; bottom: 10px; }
+}
 
 /* Fenêtre de lecture en grand */
 .vmodal {
